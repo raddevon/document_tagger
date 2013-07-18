@@ -29,7 +29,7 @@ title_search = re.compile(r'(?:title:\s*)(?P<title>([\s\S](?!\n.+:))*)', re.IGNO
 author_search = re.compile(r'(author:)(?P<author>.*)', re.IGNORECASE)
 translator_search = re.compile(r'(translator:)(?P<translator>.*)', re.IGNORECASE)
 illustrator_search = re.compile(r'(illustrator:)(?P<illustrator>.*)', re.IGNORECASE)
-doc_body_search = re.compile(r'(?:\*{3}\s*START.*\n+)(?P<body>[\s\S]*?)(?:[\n\r]+\s*(\*{3}\s*)+END)')
+doc_body_search = re.compile(r'(?:\*{3}\s*START.*\n+)(?P<body>[^\*{3}]*?)(?:[\n\r]+\s*(?:\*{3}\s*)+END)')
 
 # now iterate over the documents and extract and print output about metadata
 # for each one. Note the use of enumerate here, which gives you a counter variable
