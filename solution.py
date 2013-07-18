@@ -1,4 +1,5 @@
-import re, sys
+import re
+import sys
 from pg_sample_texts import DIV_COMM, MAG_CART
 
 documents = [DIV_COMM, MAG_CART]
@@ -28,6 +29,10 @@ title_search = re.compile(r'(?:title:\s*)(?P<title>([\s\S](?!\n.+:))*)', re.IGNO
 author_search = re.compile(r'(author:)(?P<author>.*)', re.IGNORECASE)
 translator_search = re.compile(r'(translator:)(?P<translator>.*)', re.IGNORECASE)
 illustrator_search = re.compile(r'(illustrator:)(?P<illustrator>.*)', re.IGNORECASE)
+# This works, but I'm also getting the first '***' at the end of MAG_CART.
+# I had hoped the (\*{3}\s*)+ would capture any number of those plus the
+# trailing space characters.
+doc_body_search = re.compile(r'(?:\*{3}\s*START.*\n+)(?P<body>[\s\S]*)(?:[\n\r]+\s*(\*{3}\s*)+END)')
 
 # now iterate over the documents and extract and print output about metadata
 # for each one. Note the use of enumerate here, which gives you a counter variable
@@ -63,9 +68,9 @@ keywords = sys.argv[1:]
 if keywords:
   for kw in keywords:
     searches[kw] = re.compile(r'\b' + kw + r'\b', re.IGNORECASE)
-
   for i, doc in enumerate(documents):
     print "***" * 25
     print "Here's the keyword info for doc {}:".format(i)
+    doc_body = re.search(doc_body_search, doc).group('body')
     for search in searches:
-      print "\"{0}\": {1}".format(search, len(re.findall(searches[search], doc)))
+      print "\"{0}\": {1}".format(search, len(re.findall(searches[search], doc_body)))
