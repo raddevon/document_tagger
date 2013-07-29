@@ -26,11 +26,14 @@ doc_body_search = re.compile(
 # Find and output meta tags
 searches = {}
 keywords = args.keywords
+# Compile keywords into regex
 if keywords:
     for kw in keywords:
         searches[kw] = re.compile(r'\b' + kw + r'\b', re.IGNORECASE)
+# Iterate over and open files
 for i, doc_file in enumerate(files):
     with open(os.path.join(directory, doc_file), 'r') as doc:
+        # Find meta data in text
         contents = doc.read()
         title = re.search(title_search, contents).group('title')
         author = re.search(author_search, contents)
